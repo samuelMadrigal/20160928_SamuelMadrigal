@@ -82,13 +82,26 @@ public class Formulario extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Formulario simple</h1>");
             
-            while(parametros.hasMoreElements()){
-                String elemento=parametros.nextElement();
-                String valor=request.getParameter(elemento);
-                out.println("<p id=\"sec\"><span id=\"neg\">"+elemento+" - </span>"+valor+"</p>");
+            
+            out.println("<p id=\"sec\"><span id=\"neg\">Nombre:  </span>");         
+            String nombre=request.getParameter("nombre");
+            out.println(nombre+"</p>");
+            out.println("<br>");
+            
+            out.println("<p id=\"sec\"><span id=\"neg\">Email:  </span>");         
+            String email=request.getParameter("email");
+            out.println(email+"</p>");
+            out.println("<br>");
+            
+            String marca=request.getParameter("marca");
+            if(marca!=null){
+                out.println("<p id=\"sec\"><span id=\"neg\">Si ha marcado</p>");
+            }else{
+                out.println("<p id=\"sec\"><span id=\"neg\">No ha marcado</p>");
             }
             
-            out.println("<p><a href='"+request.getContextPath()+"'>Volver atr&aacute;s</a></p>");
+            out.println("<p><a id=\"nar\" href=\"" + request.getContextPath() + "\">Volver al menu</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+            out.println("<a href=\"HTML/formularioCompleto.html\">Volver atr&aacute;s</a></p>");
             out.println("</body>");
             out.println("</html>");
             

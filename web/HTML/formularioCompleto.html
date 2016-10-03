@@ -7,47 +7,79 @@
     </head>
     <body>
         <div id="contForm">
-            <form action="../form" method="post">
-                <fieldset>
-                    <legend>Datos Personales</legend>
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" value=""/>
-                    <br>
-                    <label for="email">Correo</label>
-                    <input type="text" id="email" name="email" value=""/>
-                    <br>
-                    <label for="marca">Pulsa y marca</label>
-                    <input type="checkbox" id="marca" name="marca"/>
-                    <br>
+            <h1 id="titulo">FORMULARIO COMPLETO</h1>
+            
+            <form action="../formComp" method="post">
+                
+                <fieldset> 
+		<legend><em><strong>Datos Personales</strong></em></legend>
+                    <p><label for="nombre">Usuario:</label>
+                        <input type="text" id="nombre" name="nombre" size="20" maxlength="15" value="" /></p>
+                    
+                    <p><label for="password">Password:</label>
+                        <input type="password" id="password" name="password" size="20" maxlength="20" value="" /></p>
+                    
+                    <p><label for="edad">Edad:</label>
+                            <select id="edad" name="edad">
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                            </select>
+                    </p>
+                </fieldset>
+
+                <fieldset>  
+                <legend><em><strong>Otros datos</strong></em></legend>
+                    <p><label for="estado">Estado civil:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" id="estado" name="estado" value="soltero" checked="checked" />Soltero/a&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="estado" value="casado" />Casado/a&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="estado" value="viudo" />Viudo/a&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="estado" value="divorciado" />Divorciado/a
+                    </p>
+                    
+                    <p><label for="aficiones">Aficiones(uno o varios, CTRL):</label><br>
+                            <select id="aficiones" name="aficiones" multiple="multiple" size="6">
+                                    <option value="Deportes">Deportes</option>
+                                    <option value="Musica">M&uacute;sica</option>
+                                    <option value="Informatica">Inform&aacute;tica</option>
+                                    <option value="Viajes" selected>Viajes</option>
+                                    <option value="Tiendas">Tiendas</option>
+                                    <option value="Juegos">Juegos</option>
+                            </select>
+                    </p>
+                    
+                    <p><label>Comentario:</label><br />
+                            <textarea name="comentario" cols="60" rows="2" >Pon tu comentario...</textarea>
+                    </p>
+                </fieldset>
+
+                <fieldset>  
+                <legend><em><strong>Medios tecnol&oacute;gicos</strong></em></legend>
+                    <p><label for="internet">&iquest;Dispones de internet?</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" id="internet" name="internet" value="Si" checked="checked" />Si&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="internet" value="No" />No
+                    </p>
+                    <p><label for="sistema">Sistema Operativo(elige uno)</label><br>
+                            <select id="sistema" name="sistema" size="4">
+                                    <option value="Linux">Linux</option>
+                                    <option value="Windows" selected="selected">Windows</option>
+                                    <option value="Mac">Mac</option>
+                                    <option value="Solaris">Solaris</option>
+                            </select>
+                    </p>
                 </fieldset>
                 
-                <fieldset>
-                    <legend>Otros Datos</legend>
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" value=""/>
-                    <br>
-                    <label for="email">Correo</label>
-                    <input type="text" id="email" name="email" value=""/>
-                    <br>
-                    <label for="marca">Pulsa y marca</label>
-                    <input type="checkbox" id="marca" name="marca"/>
-                    <br>
-                </fieldset>
-                
-                <fieldset>
-                    <legend>Medios Tecnol&0acute;gicos</legend>
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" value=""/>
-                    <br>
-                    <label for="email">Correo</label>
-                    <input type="text" id="email" name="email" value=""/>
-                    <br>
-                    <label for="marca">Pulsa y marca</label>
-                    <input type="checkbox" id="marca" name="marca"/>
-                    <br>
-                    <input type="submit" id="aceptar" name="aceptar"/>
-                </fieldset>
+                <input type="submit" id="aceptar" name="aceptar" value="Enviar"/>
+                <input type="reset" id="borrar" name="borrar" value="Limpiar"/>
             </form>
+            
+            <a href="../index.html">Volver atr&aacute;s</a>
         </div>
     </body>
 </html>

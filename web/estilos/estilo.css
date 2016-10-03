@@ -41,7 +41,7 @@ h4 span{
     border:0;
 }
 
-a{
+a, #nar{
     color:orange;
 }
 
@@ -59,13 +59,34 @@ p a{
     font-weight: bold;
 }
 
+#titulo{
+    text-align:left;
+    color:#093;
+}
+
 #contForm{
-    
+    background-color:#ff9;
+    padding:10px;
 }
 
 fieldset{
-    
+    width:70%;
+    background-color:#cf9;
+    padding:10px;
 }
 legend{
-    
+    color:#093;
+}
+#contForm p{
+    margin-top:10px;
+    color:#c00;
+}
+
+#aceptar, #borrar{
+    padding:2px 15px;
+    margin:5px 20px;
+}
+
+#li{
+    margin-left:10%;
 }

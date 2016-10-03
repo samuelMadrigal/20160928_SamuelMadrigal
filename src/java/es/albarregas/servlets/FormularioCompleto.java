@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Samu
  */
-@WebServlet(name = "Formulario", urlPatterns = {"/form"})
+@WebServlet(name = "FormularioC", urlPatterns = {"/formComp"})
 public class FormularioCompleto extends HttpServlet {
 
     
@@ -82,13 +82,56 @@ public class FormularioCompleto extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Formulario completo</h1>");
             
-            while(parametros.hasMoreElements()){
-                String elemento=parametros.nextElement();
-                String valor=request.getParameter(elemento);
-                out.println("<p id=\"sec\"><span id=\"neg\">"+elemento+" - </span>"+valor+"</p>");
-            }
+            out.println("<p id=\"sec\"><span id=\"neg\">Usuario:  </span>");
+            String user=request.getParameter("nombre");
+            out.println(user+"</p>");
+            out.println("<br>");
+            out.println("<p id=\"sec\"><span id=\"neg\">Password:  </span>");         
+            String clave=request.getParameter("password");
+            out.println(clave+"</p>");
+            out.println("<br>");
+            out.println("<p id=\"sec\"><span id=\"neg\">Edad:  </span>");         
+            String edad=request.getParameter("edad");
+            out.println(edad+"</p>");
+            out.println("<br>");
+            out.println("<br>");
             
-            out.println("<p><a href='"+request.getContextPath()+"'>Volver atr&aacute;s</a></p>");
+            out.println("<p id=\"sec\"><span id=\"neg\">Estado civil:  </span>");         
+            String estado=request.getParameter("estado");
+            out.println(estado+"</p>");
+            out.println("<br>");
+            out.println("<p id=\"sec\"><span id=\"neg\">Aficiones:  </span></p><ul>");         
+            String[] aficiones=request.getParameterValues("aficiones");
+            if(aficiones!=null){
+              for(int i=0;i<aficiones.length;i++) {
+                  out.println("<li id=\"li\">" + aficiones[i]);
+              } 
+              out.println("</ul>");
+            }else{
+                out.println("<p id=\"li\">No tiene aficiones</p>");
+                out.println("</ul>");
+            }
+            out.println("<br>");
+            out.println("<p id=\"sec\"><span id=\"neg\">Comentario:  </span>");
+            String comen=request.getParameter("comentario");
+            out.println(comen+"</p>");
+            out.println("<br>");
+            out.println("<br>");
+            
+            out.println("<p id=\"sec\"><span id=\"neg\">Dispone de internet:  </span>");
+            String internet=request.getParameter("internet");
+            out.println(internet+"</p>");
+            out.println("<br>");
+            out.println("<p id=\"sec\"><span id=\"neg\">Sistema operativo:  </span>");
+            String sistema=request.getParameter("sistema");
+            out.println(sistema+"</p>");
+            out.println("<br>");
+            
+            out.println("<br>");
+            out.println("<br>");
+            
+            out.println("<p><a id=\"nar\" href=\"" + request.getContextPath() + "\">Volver al menu</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+            out.println("<a href=\"HTML/formularioCompleto.html\">Volver atr&aacute;s</a></p>");
             out.println("</body>");
             out.println("</html>");
             
