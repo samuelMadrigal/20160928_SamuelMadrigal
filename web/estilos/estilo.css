@@ -1,0 +1,60 @@
+*{
+    margin:0;
+    padding:0;
+    text-decoration:none;
+    list-style-type:none;
+}
+
+h1, h2, h4{
+    text-align:center;
+    margin-top:10px;
+}
+h1{
+    margin-bottom:20px;
+}
+h1 span{
+    color:background;
+    text-decoration:underline;
+}
+h4 span{
+    text-decoration:overline;
+}
+
+#cont{
+    width:90%;
+}
+
+#uno{
+    width:33%;
+}
+
+#uno ul{
+    text-align: center;
+}
+
+#uno li{
+    width:50%;
+    margin:2px auto;
+    border-bottom:1px dashed black;
+}
+#uno li:last-child{
+    border:0;
+}
+
+a{
+    color:orange;
+}
+
+p a{
+    margin-left:4%;
+    color:red;
+}
+
+#sec{
+    margin-left:10%;
+}
+#neg{
+    margin-right:3px;
+    font-size:1.2em;
+    font-weight: bold;
+}
