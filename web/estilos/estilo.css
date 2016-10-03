@@ -58,3 +58,15 @@ p a{
     font-size:1.2em;
     font-weight: bold;
 }
+
+#contForm{
+    background-color:green;
+}
+
+fieldset{
+    width:60%;
+    background-color:yellow;
+}
+legend{
+    color:yellowgreen;
+}
