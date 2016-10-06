@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="EjercicioServlets" default="default" basedir=".">
-    <description>Builds, tests, and runs the project EjercicioServlets.</description>
+<project name="20160928_SamuelMadrigal" default="default" basedir=".">
+    <description>Builds, tests, and runs the project 20160928_SamuelMadrigal.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 

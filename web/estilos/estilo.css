@@ -90,3 +90,8 @@ legend{
 #li{
     margin-left:10%;
 }
+
+#error{
+    color:red;
+    text-decoration:overline;
+}

@@ -101,7 +101,7 @@ public class Formulario extends HttpServlet {
             }
             
             out.println("<p><a id=\"nar\" href=\"" + request.getContextPath() + "\">Volver al menu</a>&nbsp;&nbsp;&nbsp;&nbsp;");
-            out.println("<a href=\"HTML/formularioCompleto.html\">Volver atr&aacute;s</a></p>");
+            out.println("<a href=\"HTML/formulario.html\">Volver atr&aacute;s</a></p>");
             out.println("</body>");
             out.println("</html>");
             
