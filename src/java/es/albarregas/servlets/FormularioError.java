@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "FormularioError", urlPatterns = {"/formularioError"})
 public class FormularioError extends HttpServlet {
 
+    private final String[] meses = {"0", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
     private final String[] preferencias = {"Deportes", "Lectura", "Cine", "Viajes"};
     private Enumeration<String> parametros;
 
@@ -32,34 +33,42 @@ public class FormularioError extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-        bodyCabecera(out);
-        
-        // Comprobamos si vienen errores
+            // Comprobamos si vienen errores
             boolean error = false;
             parametros = request.getParameterNames();
             while (parametros.hasMoreElements()) {
                 String nombre = parametros.nextElement();
                 if (request.getParameter("nombre").equals("") || request.getParameter("user").equals("") || request.getParameter("password").equals("") || !fechaCorrecta(request.getParameter("dia"), request.getParameter("mes"), request.getParameter("anio"))){
                     error = true;
-                }
-            }
+                }/*if*/
+            }/*while*/
 
-            
-            if (!error) {
+            if (!error) {  //Si no hay errores se va a la pantalla de registro
                 
-                bodyCabecera(out);
-                out.println("<h1>Los datos se enviaron a nuestar base de datos</h1>");
-                out.println("<a href=\"./\">Volver al menu principal</a>");
+                procesoCorrecto(out, request);
+                
+            } else if(request.getParameter("volver")==null){  //Si hay errores y volver es nulo se va a la pantalla de error
+                
+                pintarCabecera(out);
+                
+                out.println("<p>Ha habido errores</p>");
+                out.println("<form id=\"fomulario-oculto\" action=\"formularioError\" method=\"post\">");//Formulario oculto para volver
+                
+                pintarParametrosOcultos(out, request);
+                
+                out.println("<p><input type=\"submit\" id=\"aceptar\" name=\"volver\" value=\"Volver\"/></p>");
+                out.println("</form>");
                 out.println("</body>");
                 out.println("</html>");
                 
-            } else {
+            }else{  //Si volver existe se va al formulario con errores
                 
-                bodyCabecera(out);
-                bodyCuerpoError(request, response, out);
+                pintarCabecera(out);
+                pintarFormularioErrores(request, response, out);
                 
-            }
-        }
+            }/*else*/
+            
+        }/*try*/
         
     }/*doPost*/
 
@@ -72,7 +81,7 @@ public class FormularioError extends HttpServlet {
      * 
      * @param out 
      */
-    private void bodyCabecera(PrintWriter out) {
+    private void pintarCabecera(PrintWriter out) {
         out.println("<html lang=\"es\">");
         out.println("<head>");
         out.println("<title>Formulario con errores</title>");
@@ -80,12 +89,13 @@ public class FormularioError extends HttpServlet {
         out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"estilos/estilo.css\"/>");
         out.println("</head>");
         out.println("<body>");
-    }/*bodyCabecera*/
+    }/*pintarCabecera*/
+    
     /**
-     * método para pintar cuerpo de formulario con errores
+     * método para pintar formulario con errores
      *  
     */
-    private void bodyCuerpoError(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
+    private void pintarFormularioErrores(HttpServletRequest request, HttpServletResponse response, PrintWriter out)
             throws ServletException, IOException {
         
         String valor = null;
@@ -100,7 +110,7 @@ public class FormularioError extends HttpServlet {
         out.println("<p>"
                 +   "<label for=\"nombre\">*Nombre:</label>&nbsp;&nbsp;&nbsp;&nbsp;"
                 +   "<input type=\"text\" id=\"nombre\" name=\"nombre\" size=\"20\" maxlength=\"15\" value=\""+valor+"\"/>");
-        if("".equals(request.getParameter("nombre"))){
+        if("".equals(request.getParameter("nombre"))){  //Control de error en nombre
             out.println("&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"error\">Nombre obligatorio</span>");
         }
         out.println("</p>");
@@ -142,7 +152,7 @@ public class FormularioError extends HttpServlet {
             out.println("<option value=\"" + i + "\"" + valor + ">" + i + "</option>");
         }
         out.println("</select>");
-        if(!fechaCorrecta(request.getParameter("dia"), request.getParameter("mes"), request.getParameter("anio"))){
+        if(!fechaCorrecta(request.getParameter("dia"), request.getParameter("mes"), request.getParameter("anio"))){  //Control de error en fecha
             out.println("&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"error\">Fecha incorrecta</span>");
         }
         out.println("</p>");
@@ -154,7 +164,7 @@ public class FormularioError extends HttpServlet {
         out.println("<p>"
                 +   "<label for=\"user\">*Usuario:</label>&nbsp;&nbsp;&nbsp;&nbsp;"
                 +   "<input type=\"text\" id=\"user\" name=\"user\" size=\"20\" maxlength=\"15\" value=\""+valor+"\" />");
-        if("".equals(request.getParameter("user"))){
+        if("".equals(request.getParameter("user"))){  //Control de error en usuario
             out.println("&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"error\">Usuario obligatorio</span>");
         }
         out.println("</p>");
@@ -162,7 +172,7 @@ public class FormularioError extends HttpServlet {
         out.println("<p>"
                 +   "<label for=\"password\">*Contraseña:</label>&nbsp;&nbsp;&nbsp;&nbsp;"
                 +   "<input type=\"password\" id=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" value=\""+valor+"\" />");
-        if("".equals(request.getParameter("password"))){
+        if("".equals(request.getParameter("password"))){  //Control de error en password
             out.println("&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"error\">Contraseña obligatoria</span>");
         }
         out.println("</p>");
@@ -175,7 +185,7 @@ public class FormularioError extends HttpServlet {
                 +   "<label>Preferencias:</label>&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "</p>");
         StringBuilder cadena = new StringBuilder();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {  //Para devolver el checkbox de aficiones cargado 
             String aficion = "aficiones" + i;
             valor = (request.getParameter(aficion) != null) ? "checked=\"checked\"" : "";
             cadena.append("<input type=\"checkbox\" name=\"aficiones").append(i).append("\" " + "value=\"").append(preferencias[i]).append("\" ").append(valor).append(" />").append(preferencias[i]).append("&nbsp;&nbsp;&nbsp;");
@@ -183,14 +193,68 @@ public class FormularioError extends HttpServlet {
         out.println(cadena.toString());
         out.println("</fieldset>");
         
-        out.println("<input type=\"submit\" id=\"aceptar\" name=\"aceptar\" value=\"Enviar\"/>");
+        out.println("<input type=\"submit\" id=\"aceptar\" name=\"enviar\" value=\"Enviar\"/>");
         out.println("<input type=\"button\" id=\"borrar\" name=\"borrar\" value=\"Limpiar\" onClick=\"location.href='HTML/formularioError.html';\"/>");
         out.println("</form>");
         out.println("<a href=\".\">Volver al menu principal</a>");
         out.println("</div>");
         out.println("</body>");
         out.println("</html>");
-    }
+    }/*pintarFormularioErrores*/
+    
+    /**
+     * método para pintar parametros ocultos
+     * 
+     * @param out 
+     * @param request 
+     */
+    public void pintarParametrosOcultos(PrintWriter out, HttpServletRequest request) {
+            parametros=request.getParameterNames(); //Se obtienen los parametros de la peticion
+            int num=0; //Variable para el control de aficiones
+            while(parametros.hasMoreElements()){
+                    String elemento=parametros.nextElement();
+                    String[] valores=request.getParameterValues(elemento);
+                    if(!"enviar".equals(elemento)){ //Para no mostrar los botones
+                        for (int i = 0; i < valores.length; i++) {
+                            out.println("<input type=\"hidden\" name=\"" + elemento + "\" value=\"" + valores[i] + "\" />"); //Creacion de campos ocultos con los parametro
+                        }/*for*/
+                        if(num==0){ //Cerrar parrafos hasta que llega la primera aficion
+                            out.println("</p>");
+                        }
+                    }/*if*/
+                }/*while*/
+    }/*pintarParametrosOcultos*/
+    
+    /**
+     * método para pintar parametros
+     * 
+     * @param out 
+     * @param request 
+     */
+    public void pintarParametros(PrintWriter out, HttpServletRequest request) {
+            parametros=request.getParameterNames(); //Se obtienen los parametros de la peticion
+            int num=0; //Variable para el control de aficiones
+            while(parametros.hasMoreElements()){
+                    String elemento=parametros.nextElement();
+                    String[] valores=request.getParameterValues(elemento);
+                    if(!"confirmar".equals(elemento) && !"enviar".equals(elemento) && !"cambiar".equals(elemento)
+                    && !"dia".equals(elemento) && !"mes".equals(elemento) && !"anio".equals(elemento)){ //Para no mostrar los botones ni fecha
+                        if(!elemento.startsWith("afi")){
+                            out.println("<p id=\"sec\"><span id=\"neg\">"+elemento+" - </span>");
+                        }else if(num==0){
+                            out.println("<p id=\"sec\"><span id=\"neg\">Preferencias - </span>");
+                            num++;
+                        }
+                        for (int i = 0; i < valores.length; i++) {
+                            out.println(" "+valores[i]);
+                        }/*for*/
+                        if(num==0){ //Cerrar parrafos hasta que llega la primera aficion
+                            out.println("</p>");
+                        }
+                    }/*if*/
+                }/*while*/
+            out.println("<p id=\"sec\"><span id=\"neg\">Fecha nacimiento - </span>" +request.getParameter("dia")+ " de " +meses[Integer.parseInt(request.getParameter("mes"))]+ " de " +request.getParameter("anio")+"</p>");
+    }/*pintarParametros*/
     
     /**
      * método para fecha correcta
@@ -236,11 +300,18 @@ public class FormularioError extends HttpServlet {
      * método para formulario correcto
      * 
      * @param out 
+     * @param request 
      */
-    public void procesoCorrecto(PrintWriter out) {
+    public void procesoCorrecto(PrintWriter out, HttpServletRequest request) {
         
-            bodyCabecera(out);
+            pintarCabecera(out);
+            
             out.println("<h1>Los datos se enviaron a nuestar base de datos</h1>");
+            
+            pintarParametros(out, request);
+                
+            out.println("</p><p><a href=\"HTML/formularioError.html\">Volver al formulario</a></p>");
+            out.println("<p><a id=\"nar\" href=\".\">Volver al menu principal</a></p>");
             out.println("</body>");
             out.println("</html>");
             

@@ -18,82 +18,165 @@ public class FormularioCorrecto extends HttpServlet {
 
     String user="";
     String clave="";
+    Enumeration<String> parametros;
+    private final String[] preferencias = {"Deportes", "Viajes", "Tiendas", "Juegos"};
 
-
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doPost(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
         
-            if(request.getParameter("enviar")!=null){
+            if(request.getParameter("enviar")!=null){  //Si viene de enviar se muestran parametros en formulario oculto
               
-                bodyCabecera(out);
+                pintarCabecera(out);
                 
-                out.println("<form id=\"fomulario-oculto\" action=\"formularioCorrecto\">");
+                out.println("<form id=\"fomulario-oculto\" action=\"formularioCorrecto\" method=\"post\">");
                 
-                Enumeration<String> parametros=request.getParameterNames();
+                pintarParametrosOcultos(out, request);
                 
-                while(parametros.hasMoreElements()){
-                    String elemento=parametros.nextElement();
-                    String[] valores=request.getParameterValues(elemento);
-                    if(!"enviar".equals(elemento)){
-                        out.println("<p id=\"sec\"><span id=\"neg\">"+elemento+" - </span>");
-                        for (int i = 0; i < valores.length; i++) {
-                            out.println(" "+valores[i]);
-                            out.println("<input type=\"hidden\" name=\"" + elemento + "\" value=\"" + valores[i] + "\" />");
-                        }/*for*/
-                        out.println("</p>");
-                    }/*if*/
-                    
-                }/*while*/
-                
-                user=request.getParameter("nombre");
-                clave=request.getParameter("password");
-                
-                out.println("<input type=\"hidden\" name=\"nombre\" value=\"" + user + "\" />");
-                out.println("<input type=\"hidden\" name=\"password\" value=\"" + clave + "\" />");
-                out.println("<p><input type=\"submit\" name=\"confirmar\" value=\"Confirmar\" />");
-                out.println("<p><input type=\"submit\" name=\"cambiar\" value=\"Cambiar datos\" />");
+                out.println("<p><input type=\"submit\" id=\"aceptar\" name=\"confirmar\" value=\"Confirmar\"/>");
+                out.println("<input type=\"submit\" id=\"borrar\" name=\"cambiar\" value=\"Cambiar datos\"/></p>");
                 out.println("</form>");
                 out.println("</body>");
                 out.println("</html>");
                 
-            }else{
+            }else{  //Si NO viene de enviar
                 
-                if(request.getParameter("confirmar")!=null){
+                if(request.getParameter("confirmar")!=null){  //Si viene de confirmar se procede al registro
                     
-                    procesoCorrecto(out);
+                    procesoCorrecto(out, request);
                   
-                }else{
+                }else{  //Si viene de primeras, cambiar o limpiar se muestra formulario
                     
-                    bodyCabecera(out);
+                    if(request.getParameter("cambiar")!=null){ //Si viene de cambiar se devuelven los parametros
+                        user=request.getParameter("nombre");
+                        clave=request.getParameter("password");
+                    }else{
+                        user="";
+                        clave="";
+                    }
+                    
+                    pintarCabecera(out);
 
-                    out.println("<h1>Formulario de datos</h1>");
+                    pintarFormulario(out, request);
+                    
+                }/*if confirmar*/ 
+            }/*if enviar*/
+        }/*try*/
+    }/*doPost*/
+
+    
+    
+    /**
+     * método para pintar cabecera
+     * 
+     * @param out 
+     */
+    public void pintarCabecera(PrintWriter out) {
+        out.println("<html lang=\"es\">");
+        out.println("<head>");
+        out.println("<title>Formulario con regreso</title>");
+        out.println("<meta http-equiv=\"content-type\" content=\"text/html;charset=ISO-8859-1\" />");
+        out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"estilos/estilo.css\"/>");
+        out.println("</head>");
+        out.println("<body>");
+    }/*bodyCabecera*/
+    
+    /**
+     * método para formulario correcto
+     * 
+     * @param out 
+     * @param request 
+     */
+    public void procesoCorrecto(PrintWriter out, HttpServletRequest request) {
+        
+            pintarCabecera(out);
+        
+            out.println("<h1>Los datos se enviaron a nuestar base de datos</h1>");
+            
+            pintarParametros(out, request);
+            
+            out.println("</p><p><a href=\"./formularioCorrecto\">Volver al formulario</a></p>");
+            out.println("<p><a id=\"nar\" href=\".\">Volver al menu principal</a></p>");
+            out.println("</body>");
+            out.println("</html>");
+    }/*procesoCorrecto*/
+    
+    /**
+     * método para pintar parametros ocultos
+     * 
+     * @param out 
+     * @param request 
+     */
+    public void pintarParametrosOcultos(PrintWriter out, HttpServletRequest request) {
+            parametros=request.getParameterNames(); //Se obtienen los parametros de la peticion
+            int num=0; //Variable para el control de aficiones
+            while(parametros.hasMoreElements()){
+                    String elemento=parametros.nextElement();
+                    String[] valores=request.getParameterValues(elemento);
+                    if(!"enviar".equals(elemento)){ //Para no mostrar los botones
+                        if(!elemento.startsWith("afi")){
+                            out.println("<p id=\"sec\"><span id=\"neg\">"+elemento+" - </span>");
+                        }else if(num==0){
+                            out.println("<p id=\"sec\"><span id=\"neg\">Preferencias - </span>");
+                            num++;
+                        }
+                        for (int i = 0; i < valores.length; i++) {
+                            out.println(" "+valores[i]);
+                            out.println("<input type=\"hidden\" name=\"" + elemento + "\" value=\"" + valores[i] + "\" />"); //Creacion de campos ocultos con los parametro
+                        }/*for*/
+                        if(num==0){ //Cerrar parrafos hasta que llega la primera aficion
+                            out.println("</p>");
+                        }
+                    }/*if*/
+                }/*while*/
+    }/*pintarParametrosOcultos*/
+    
+    /**
+     * método para pintar parametros
+     * 
+     * @param out 
+     * @param request 
+     */
+    public void pintarParametros(PrintWriter out, HttpServletRequest request) {
+            parametros=request.getParameterNames(); //Se obtienen los parametros de la peticion
+            int num=0; //Variable para el control de aficiones
+            while(parametros.hasMoreElements()){
+                    String elemento=parametros.nextElement();
+                    String[] valores=request.getParameterValues(elemento);
+                    if(!"confirmar".equals(elemento) && !"enviar".equals(elemento) && !"cambiar".equals(elemento)){ //Para no mostrar los botones
+                        if(!elemento.startsWith("afi")){
+                            out.println("<p id=\"sec\"><span id=\"neg\">"+elemento+" - </span>");
+                        }else if(num==0){
+                            out.println("<p id=\"sec\"><span id=\"neg\">Preferencias - </span>");
+                            num++;
+                        }
+                        for (int i = 0; i < valores.length; i++) {
+                            out.println(" "+valores[i]);
+                        }/*for*/
+                        if(num==0){ //Cerrar parrafos hasta que llega la primera aficion
+                            out.println("</p>");
+                        }
+                    }/*if*/
+                }/*while*/
+    }/*pintarParametros*/
+    
+    /**
+     * método para pintar formulario
+     * 
+     * @param out 
+     * @param request 
+     */
+    public void pintarFormulario(PrintWriter out, HttpServletRequest request) {
+        out.println("<h1>Formulario de datos</h1>");
                     out.println("<form id=\"fomulario-datos\" action=\"formularioCorrecto\" method=\"post\">" );
                     out.println("<fieldset> ");
                     out.println("<legend><em><strong>Datos</strong></em></legend>");
@@ -102,7 +185,9 @@ public class FormularioCorrecto extends HttpServlet {
                     out.println("<p><label for=\"clave\">Pasword:</label><br />");
                     out.println("<input type=\"password\" id=\"password\" name=\"password\" size=\"20\" maxlength=\"15\" value=\""+clave+"\" /></p>");
                     out.println("<p><label for=\"sexo\">Sexo:</label>&nbsp;&nbsp;&nbsp;&nbsp;");
-                    if(request.getParameter("sexo")==null || "Hombre".equals(request.getParameter("sexo"))){
+                    //Para devolver el sexo
+                    //Si viene de primeras, o igual a hombre, o viene de limpiar
+                    if(request.getParameter("sexo")==null || "Hombre".equals(request.getParameter("sexo")) || request.getParameter("borrar")!=null){
                         out.println("<input type=\"radio\" id=\"sexo\" name=\"sexo\" value=\"Hombre\" checked=\"checked\" />Hombre&nbsp;&nbsp;&nbsp;&nbsp;");
                         out.println("<input type=\"radio\" name=\"sexo\" value=\"Mujer\" />Mujer&nbsp;&nbsp;&nbsp;&nbsp;");
                     }else{
@@ -113,58 +198,31 @@ public class FormularioCorrecto extends HttpServlet {
                     out.println("<p><label id=\"aficiones\">Preferencias:</label></p>");
                     out.println("<table summary=\"\" >");
                     out.println("<tr>");
-                    if(request.getParameter("aficiones")==null){
-                        out.println("<td><input type=\"checkbox\" name=\"aficiones\" value=\"Deportes\" />Deportes&nbsp;&nbsp;&nbsp;</td>");
-                        out.println("<td><input type=\"checkbox\" name=\"aficiones\" value=\"Viajes\" />Viajes&nbsp;&nbsp;&nbsp;</td>");
-                        out.println("<td><input type=\"checkbox\" name=\"aficiones\" value=\"Tiendas\" />Tiendas&nbsp;&nbsp;&nbsp;</td>");
-                        out.println("<td><input type=\"checkbox\" name=\"aficiones\" value=\"Juegos\" />Juegos</td>");
-                    }else{
-                        //aficiones desde cambiar
-                        out.println("Proceso de devolver aficiones");
+                    if(request.getParameter("cambiar")==null){  //Para devolver el checkbox de aficiones vacio si NO viene de cambiar
+                        out.println("<td><input type=\"checkbox\" name=\"aficiones0\" value=\"Deportes\" />Deportes&nbsp;&nbsp;&nbsp;</td>");
+                        out.println("<td><input type=\"checkbox\" name=\"aficiones1\" value=\"Viajes\" />Viajes&nbsp;&nbsp;&nbsp;</td>");
+                        out.println("<td><input type=\"checkbox\" name=\"aficiones2\" value=\"Tiendas\" />Tiendas&nbsp;&nbsp;&nbsp;</td>");
+                        out.println("<td><input type=\"checkbox\" name=\"aficiones3\" value=\"Juegos\" />Juegos</td>");
+                    }else{  //Para devolver el checkbox de aficiones cargado si viene de cambiar
+                        StringBuilder cadena = new StringBuilder();
+                        String valor;
+                            for (int i = 0; i < 4; i++) {
+                                String aficion = "aficiones" + i;
+                                valor = (request.getParameter(aficion) != null) ? "checked=\"checked\"" : "";
+                                cadena.append("<input type=\"checkbox\" name=\"aficiones").append(i).append("\" " + "value=\"").append(preferencias[i]).append("\" ").append(valor).append(" />").append(preferencias[i]).append("&nbsp;&nbsp;&nbsp;");
+                            }
+                        out.println(cadena.toString());
                     }
                     out.println("</tr>");
                     out.println("</table>");
                     out.println("</fieldset>");
-                    out.println("<p><input type=\"submit\" name=\"enviar\" value=\"Enviar\" />");
-                    out.println("<p><input type=\"reset\" name=\"borrar\" value=\"Limpiar\" />");
+                    out.println("<p><input type=\"submit\" id=\"aceptar\" name=\"enviar\" value=\"Enviar\"/>");
+                    out.println("<input type=\"submit\" id=\"borrar\" name=\"borrar\" value=\"Limpiar\"/></p>");
                     out.println("</form>");
+                    out.println("<a href=\".\">Volver al menu principal</a>");
                     out.println("</body>");
                     out.println("</html>");
-                }/*if confirmar*/ 
-            }/*if enviar*/
-        }/*try*/
-    }/*doPost*/
-
-    
-    /**
-     * método para pintar cabecera
-     * 
-     * @param out 
-     */
-    public void bodyCabecera(PrintWriter out) {
-        out.println("<html lang=\"es\">");
-        out.println("<head>");
-        out.println("<title>Formulario con regreso</title>");
-        out.println("<meta http-equiv=\"content-type\" content=\"text/html;charset=ISO-8859-1\" />");
-        out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"estilos/estilo.css\"/>");
-        out.println("</head>");
-        out.println("<body>");
-    }/*bodyCabecera*/
-    
-    
-    /**
-     * método para formulario correcto
-     * 
-     * @param out 
-     */
-    public void procesoCorrecto(PrintWriter out) {
-        
-            bodyCabecera(out);
-        
-            out.println("<h1>Los datos se enviaron a nuestar base de datos</h1>");
-            out.println("</body>");
-            out.println("</html>");
-    }/*procesoCorrecto*/
+    }/*pintarFormulario*/
     
     
     
@@ -176,5 +234,6 @@ public class FormularioCorrecto extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
-}
+    }/*getServletInfo*/
+    
+}//FormularioCorrecto servlet
