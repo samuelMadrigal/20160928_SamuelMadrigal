@@ -1,0 +1,29 @@
+<html lang="es">
+    <head>
+        <title>SaludoJSP</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../estilos/estilo.css" type="text/css"/>
+    </head>
+    <body>
+        <div id="contForm">
+            <h1 id="titulo">FORMULARIO SIMPLE</h1>
+        
+            <form action="../JSP/saludo.jsp" method="post">
+                <fieldset>
+                    <legend>Datos Personales</legend>
+                    <p><label for="nombre">Nombre: </label></p>
+                    <input type="text" id="nombre" name="nombre" value=""/>
+                    
+                    <p><label for="sexo1">Sexo</label></p>
+                    <input type="radio" id="sexo1" name="sexo" value="Hombre" checked/> Hombre
+                    <input type="radio" id="sexo2" name="sexo" value="Mujer"/> Mujer
+                    
+                    <input type="submit" id="aceptar" name="aceptar"/>
+                </fieldset>
+            </form>
+            
+            <a href="../index.html">Volver atr&aacute;s</a>
+        </div>
+    </body>
+</html>

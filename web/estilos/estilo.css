@@ -24,20 +24,21 @@ h4 span{
     width:90%;
 }
 
-#uno{
+#uno, #dos, #tres{
     width:33%;
+    float:left;
 }
 
-#uno ul{
+#uno ul, #dos ul, #tres ul{
     text-align: center;
 }
 
-#uno li{
+#uno li, #dos li, #tres li{
     width:50%;
     margin:2px auto;
     border-bottom:1px dashed black;
 }
-#uno li:last-child{
+#uno li:last-child, #dos li:last-child, #tres li:last-child{
     border:0;
 }
 
