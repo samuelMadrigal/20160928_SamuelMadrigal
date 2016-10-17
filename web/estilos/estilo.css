@@ -83,7 +83,7 @@ legend{
     color:#c00;
 }
 
-#aceptar, #borrar{
+#aceptar, #borrar, #enviar, #limpiar, #recargar{
     padding:2px 15px;
     margin:5px 20px;
 }

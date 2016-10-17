@@ -7,3 +7,4 @@ Servlets: Saludo, Ciclo de vida, Parámetros y Cabeceras.
 ### Añadido FormularioErrores
 ### Finalizado FormularioCorrecto(mismo servlet) y FormularioErrores
 ### Añadido SaludoJsp y CalculadoraJsp
+### Añadido ContadorCookies y ContadorSesion
