@@ -1,6 +1,6 @@
-# EjercicioServlets
-Ejercicio de crear una lista de actividades con cuatro servlets funcionando.
-Servlets: Saludo, Ciclo de vida, Parámetros y Cabeceras.
+# EjerciciosClase
+Ejercicio de crear una lista de actividades.
+### Añadido Servlets: Saludo, Ciclo de vida, Parámetros y Cabeceras.
 ### Añadido Formulario
 ### Añadido FormularioCompleto
 ### Añadido FormularioCorrecto(con regreso)
@@ -8,3 +8,4 @@ Servlets: Saludo, Ciclo de vida, Parámetros y Cabeceras.
 ### Finalizado FormularioCorrecto(mismo servlet) y FormularioErrores
 ### Añadido SaludoJsp y CalculadoraJsp
 ### Añadido ContadorCookies y ContadorSesion
+### Añadido CarritoJsp
